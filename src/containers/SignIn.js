@@ -1,15 +1,38 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState, useContext} from 'react';
+import DataContext from '../contexts/DataContext';
 
 export default function SignUp(){
+    const {setToken} = useContext(DataContext);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+    const API = 'http://localhost:5000/sign-in';
+
+    function Send(event){
+        event.preventDefault();
+        const body = {email, password}
+        const promise = axios.post(API, body);
+        promise.then(response => {
+            console.log(response.data);
+            setToken(response.data.token);
+            navigate('/main');
+        })
+        promise.catch((error) => {console.log(error.response.data)})
+    }
+
     return(
         <Container>
-            <p>My Wallet</p>
-            <input type='email' placeholder='Email'/>
-            <input type='password' placeholder='Senha'/>
-            <div>
-                <h3>Entrar</h3>
-            </div>
+            <form onSubmit={Send}>
+                <p>My Wallet</p>
+                <input type='email' placeholder='Email' value={email} onChange={(e) => {setEmail(e.target.value)}} required/>
+                <input type='password' placeholder='Senha' value={password} onChange={(e) => {setPassword(e.target.value)}} required/>
+                <button type='submit'>
+                    <h3>Entrar</h3>
+                </button>
+            </form>
             <Link to="/sign-up" style={{textDecoration: "none"}}>
                 <h4>Primeira vez? Cadastre-se!</h4>
             </Link>
@@ -22,6 +45,13 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
 
     p {
         font-family: 'Saira Stencil One';
@@ -57,7 +87,7 @@ const Container = styled.div`
         color: #000000;
     }
 
-    div {
+    button {
         width: 326px;
         height: 46px;
         background-color: #a328d6;
@@ -65,13 +95,14 @@ const Container = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+        border: none;
     }
 
-    div:hover {
+    button:hover {
         cursor: pointer;
     }
 
-    div h3 {
+    button h3 {
         font-family: 'Raleway';
         font-style: normal;
         font-weight: 700;

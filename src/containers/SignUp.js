@@ -10,7 +10,7 @@ export default function SignUp(){
     const [password, setPassword] = useState('');
     const [checkPassword, setCheckPassword] = useState('');
     const navigate = useNavigate();
-    const API = 'https://localhost:5000/sign-up';
+    const API = 'http://localhost:5000/sign-up';
 
     function Send(event){
         event.preventDefault();
@@ -18,8 +18,11 @@ export default function SignUp(){
         if(password === checkPassword){
             const body = {name, email, password};
             const promise = axios.post(API, body);
-            promise.then(() => {navigate('/')});
-            promise.catch((error) => {console.log(error)})
+            promise.then(response => {
+                console.log(response.data);
+                navigate('/');
+            });
+            promise.catch((error) => {console.log(error.response.data)})
         } else {
             alert('Please, confirm password correctly.')
         }
