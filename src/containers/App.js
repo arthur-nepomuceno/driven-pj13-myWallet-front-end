@@ -12,8 +12,9 @@ import EditCheckOut from './EditCheckOut';
 import DataContext from '../contexts/DataContext';
 
 export default function App(){
-  const [token, setToken] = useState(null);
-  const contextData = {token, setToken};
+  const [user, setUser] = useState(null);
+  const [transactions, setTransactions] = useState([]);
+  const contextData = {user, setUser, transactions, setTransactions};
   return(
     <BrowserRouter>
       <DataContext.Provider value={contextData}>

@@ -1,15 +1,51 @@
 import styled from 'styled-components';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useEffect, useContext } from 'react';
+import DataContext from '../contexts/DataContext';
+import Register from '../components/Register';
 
 export default function Main(){
+    const {user, transactions, setTransactions} = useContext(DataContext);
+    const token = user.token;
+    const API = 'http://localhost:5000/transactions';
+    const config = {headers: {Authorization: `Bearer ${token}`}};
+
+    useEffect(() => {
+        const promise = axios.get(API, config);
+        promise.then(response => {
+            console.log(response.data);
+            setTransactions(response.data);
+        });
+        promise.catch(error => {console.log(error.response.data)});
+    }, [])
+
+    let balance = 0;
+    transactions.map(t => {
+        if(t.type === 'deposit'){
+            balance += parseFloat(t.value);
+        } else {
+            balance -= parseFloat(t.value);
+        }
+    })
+
     return(
-        <Container>
+        <Container color={balance > 0 ? '#5AAE2E' : '#C70000'}>
             <div id='title'>
-                <h3>Olá, Fulano</h3>
+                <h3>Olá, {user.name}</h3>
                 <ion-icon name="exit-outline"></ion-icon>
             </div>
             <div id='registers'>
-                <h3>Não há registros de entrada ou saída.</h3>
+                {transactions.length === 0 ? <h3>Não há registros de entrada ou saída.</h3>
+                                           : <>{transactions.map(t => <Register date={t.date} 
+                                                                                description={t.description} 
+                                                                                value={t.value} 
+                                                                                type={t.type}/>)}
+                                             <p id='balance'>
+                                                 <div>Saldo:</div> 
+                                                 <div>{balance.toFixed(2)}</div>
+                                             </p>
+                                             </>}
             </div>
             <div id='options'>
                 <div>
@@ -61,6 +97,8 @@ const Container = styled.div`
         border-radius: 5px;
         position: relative;
         margin-bottom: 13px;
+        padding-top: 23px;
+        padding-left: 12px;
     }
 
     div#registers h3 {
@@ -75,6 +113,13 @@ const Container = styled.div`
         position: absolute;
         top: 200px;
         left: 73px;
+    }
+
+    div#registers div {
+        width: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     div#options {
@@ -113,5 +158,26 @@ const Container = styled.div`
         font-weight: 700;
         font-size: 17px;
         color: #FFFFFF;
+    }
+
+    p#balance {
+        width: 300px;
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 17px;
+        position: absolute;
+        bottom: 10px;
+
+        display: flex;
+        justify-content: space-between;
+    }
+
+    p#balance div{
+        width: fit-content;
+    }
+
+    p#balance div:nth-child(2){
+        color: ${props => props.color};
     }
 `

@@ -5,7 +5,7 @@ import { useState, useContext} from 'react';
 import DataContext from '../contexts/DataContext';
 
 export default function SignUp(){
-    const {setToken} = useContext(DataContext);
+    const {setUser} = useContext(DataContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -17,7 +17,8 @@ export default function SignUp(){
         const promise = axios.post(API, body);
         promise.then(response => {
             console.log(response.data);
-            setToken(response.data.token);
+            const info = response.data;
+            setUser({...info});
             navigate('/main');
         })
         promise.catch((error) => {console.log(error.response.data)})
