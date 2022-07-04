@@ -1,16 +1,47 @@
 import styled from 'styled-components';
+import axios from 'axios';
+import { useContext, useState } from 'react';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import DataContext from '../contexts/DataContext';
 
 export default function EditCheckIn(){
+    const {id} = useParams();
+    const {user} = useContext(DataContext);
+    const token = user.token;
+    const [value, setValue] = useState(null);
+    const [description, setDescription] = useState(null);
+    const API = `http://localhost:5000/transactions/${id}`;
+    const navigate = useNavigate();
+
+    function Send(event){
+        event.preventDefault();
+        const body = {value, description, type: 'deposit'};
+        const config = {headers: {Authorization: `Bearer ${token}`}};
+
+        const promise = axios.put(API, body, config);
+        promise.then(response => {
+            setValue(null);
+            setDescription(null);
+            navigate('/main');
+        });
+        promise.catch(error => console.log(error.response.data));
+    }
+
     return (
         <Container>
-            <div id='title'>
-                <h3>Editar entrada</h3>
-            </div>
-            <input type='text' placeholder='Valor'/>
-            <input type='text' placeholder='Descrição'/>
-            <button type='submit'>
-                <h3>Atualizar entrada</h3>
-            </button>
+            <form onSubmit={Send}>
+                <div id='title'>
+                    <h3>Editar entrada</h3>
+                </div>
+                <input type='number' placeholder='Valor' value={value} onChange={(e) => {setValue(e.target.value)}} required/>
+                <input type='text' placeholder='Descrição' value={description} onChange={(e) => {setDescription(e.target.value)}} required/>
+                <button type='submit'>
+                    <h3>Atualizar entrada</h3>
+                </button>
+            </form>
+            <Link to="/main" style={{textDecoration: "none"}}>
+                <h4>Retornar</h4>
+            </Link>
         </Container>
     );
 }
@@ -20,6 +51,11 @@ const Container = styled.div`
     padding-top: 25px;
     padding-left: 25px;
     padding-right: 25px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     div#title {
         display: flex;
@@ -81,5 +117,18 @@ const Container = styled.div`
         font-weight: 700;
         font-size: 20px;
         color: #FFFFFF;
+    }
+
+    h4 {
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 15px;
+        color: #FFFFFF;
+        margin-top: 32px;
+    }
+
+    h4:hover {
+        cursor: pointer;
     }
 `

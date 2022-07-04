@@ -22,7 +22,6 @@ export default function NewCheckIn(){
             setValue(null);
             setDescription(null);
             navigate('/main');
-            console.log(response.data);
         });
         promise.catch(error => console.log(error.response.data));
     }

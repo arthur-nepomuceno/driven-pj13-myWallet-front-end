@@ -14,7 +14,6 @@ export default function Main(){
     useEffect(() => {
         const promise = axios.get(API, config);
         promise.then(response => {
-            console.log(response.data);
             setTransactions(response.data);
         });
         promise.catch(error => {console.log(error.response.data)});
@@ -40,7 +39,8 @@ export default function Main(){
                                            : <>{transactions.map(t => <Register date={t.date} 
                                                                                 description={t.description} 
                                                                                 value={t.value} 
-                                                                                type={t.type}/>)}
+                                                                                type={t.type} 
+                                                                                id={t._id}/>)}
                                              <p id='balance'>
                                                  <div>Saldo:</div> 
                                                  <div>{balance.toFixed(2)}</div>

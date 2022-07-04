@@ -16,7 +16,6 @@ export default function SignUp(){
         const body = {email, password}
         const promise = axios.post(API, body);
         promise.then(response => {
-            console.log(response.data);
             const info = response.data;
             setUser({...info});
             navigate('/main');

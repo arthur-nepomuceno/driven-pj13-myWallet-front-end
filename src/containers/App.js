@@ -24,8 +24,8 @@ export default function App(){
             <Route path='/main' element={<Main/>}/>
             <Route path='/new-check-in' element={<NewCheckIn/>}/>
             <Route path='/new-check-out' element={<NewCheckOut/>}/>
-            <Route path='/edit-check-in' element={<EditCheckIn/>}/>
-            <Route path='/edit-check-out' element={<EditCheckOut/>}/>
+            <Route path='/edit-check-in/:id' element={<EditCheckIn/>}/>
+            <Route path='/edit-check-out/:id' element={<EditCheckOut/>}/>
           </Routes>
       </DataContext.Provider>
     </BrowserRouter>
