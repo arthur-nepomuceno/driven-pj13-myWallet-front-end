@@ -9,7 +9,7 @@ export default function SignUp(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const API = 'http://localhost:5000/sign-in';
+    const API = 'https://driven-pj13-mywallet.herokuapp.com/sign-in';
 
     function Send(event){
         event.preventDefault();

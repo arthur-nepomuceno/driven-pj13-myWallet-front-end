@@ -9,7 +9,7 @@ export default function NewCheckIn(){
     const token = user.token;
     const [value, setValue] = useState(null);
     const [description, setDescription] = useState(null);
-    const API = 'http://localhost:5000/transactions';
+    const API = 'https://driven-pj13-mywallet.herokuapp.com/transactions';
     const navigate = useNavigate();
 
     function Send(event){

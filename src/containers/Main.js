@@ -8,7 +8,7 @@ import Register from '../components/Register';
 export default function Main(){
     const {user, transactions, setTransactions} = useContext(DataContext);
     const token = user.token;
-    const API = 'http://localhost:5000/transactions';
+    const API = 'https://driven-pj13-mywallet.herokuapp.com/transactions';
     const config = {headers: {Authorization: `Bearer ${token}`}};
 
     useEffect(() => {
